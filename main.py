@@ -17,6 +17,30 @@ def comment_stream(r, subreddit):
             body = comment.body
             parent = r.comment(comment.parent_id)
             comment.mod.remove()
+           
+        
+            body = body.split(" ")
+
+            for i in range(len(body)):
+                if body[i] == "!pass":
+                    user_hash = zlib.crc32(bytes(body[i+1] + str(comment.author) , "utf-8" ))
+
+                    body.pop(i)
+                    body.pop(i+1)
+
+
+                    body = "USERHASH:" + str(user_hash) + "\n\n" + " ".join(body)
+                    body = body[:10000]
+
+                    break
+                
+                parent.reply(body)
+                break
+         
+             
+                    
+            body = " ".join(body)
+     
             parent.reply(body)
 
 def post_stream(r, subreddit):
